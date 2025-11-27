@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>#{facesContext.viewRoot.viewId.replace('.xhtml','').replace('/','')} - Polnilnice</title>
+
+</h:head>
+
+<h:body>
+    <!-- Main Menu Bar -->
+    <p:menubar>
+        <!-- CRUD Operations -->
+        <p:menuitem value="Polnilnice" outcome="polnilnice" icon="pi pi-bolt"
+                    styleClass="#{facesContext.viewRoot.viewId eq '/polnilnice.xhtml' ? 'menu-active' : ''}"/>
+
+        <p:menuitem value="Ponudniki" outcome="Ponudnik" icon="pi pi-briefcase"
+                    styleClass="#{facesContext.viewRoot.viewId eq '/Ponudnik.xhtml' ? 'menu-active' : ''}"/>
+
+        <p:menuitem value="Uporabniki" outcome="user" icon="pi pi-users"
+                    styleClass="#{facesContext.viewRoot.viewId eq '/user.xhtml' ? 'menu-active' : ''}"/>
+
+    </p:menubar>
+
+    <!-- Content Area -->
+    <div class="content-area">
+        <ui:insert name="content">
+            Default content - Will be replaced by specific pages
+        </ui:insert>
+    </div>
+</h:body>
+</html>

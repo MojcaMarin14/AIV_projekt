@@ -1,0 +1,86 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form id="addForm">
+            <p:panel header="Dodaj novega ponudnika">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="id" value="ID:"/>
+                    <p:inputText id="id" value="#{ponudnikBean.id}"/>
+
+                    <h:outputLabel for="ime" value="Ime:"/>
+                    <p:inputText id="ime" value="#{ponudnikBean.ime}"/>
+
+                    <h:outputLabel for="lokacija" value="Lokacija:"/>
+                    <p:inputText id="lokacija" value="#{ponudnikBean.lokacija}"/>
+
+                    <h:outputLabel for="email" value="Email:"/>
+                    <p:inputText id="email" value="#{ponudnikBean.email}"/>
+                </h:panelGrid>
+
+                <p:commandButton value="Dodaj ponudnika" action="#{ponudnikBean.addProvider}"
+                                 update="addForm tableForm" icon="pi pi-plus"/>
+            </p:panel>
+        </h:form>
+
+        <h:form id="tableForm">
+            <p:growl id="messages" showDetail="true"/>
+            <p:panel header="Seznam ponudnikov">
+                <p:dataTable id="ponudnikiTable" value="#{ponudnikBean.getAllProviders()}" var="p" paginator="true" rows="10">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{p.id}"/>
+                    </p:column>
+                    <p:column headerText="Ime">
+                        <h:outputText value="#{p.ime}"/>
+                    </p:column>
+                    <p:column headerText="Lokacija">
+                        <h:outputText value="#{p.lokacija}"/>
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{p.email}"/>
+                    </p:column>
+                    <p:column headerText="Akcije">
+                        <p:commandButton value="Izbriši" action="#{ponudnikBean.deleteProvider(p.id)}"
+                                         update="tableForm" icon="pi pi-trash"/>
+                        <p:commandButton value="Uredi" onclick="PF('ponudnikDialog').show()"
+                                         icon="pi pi-pencil">
+                            <f:setPropertyActionListener value="#{p}" target="#{ponudnikBean.selectedPonudnik}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog header="Uredi ponudnika" widgetVar="ponudnikDialog" modal="true" resizable="false">
+            <h:form id="editForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="editId" value="ID:"/>
+                    <p:inputText id="editId" value="#{ponudnikBean.selectedPonudnik.id}" readonly="false"/>
+
+                    <h:outputLabel for="editIme" value="Ime:"/>
+                    <p:inputText id="editIme" value="#{ponudnikBean.selectedPonudnik.ime}"/>
+
+                    <h:outputLabel for="editLokacija" value="Lokacija:"/>
+                    <p:inputText id="editLokacija" value="#{ponudnikBean.selectedPonudnik.lokacija}"/>
+
+                    <h:outputLabel for="editEmail" value="Email:"/>
+                    <p:inputText id="editEmail" value="#{ponudnikBean.selectedPonudnik.email}"/>
+                </h:panelGrid>
+
+                <p:commandButton value="Shrani" action="#{ponudnikBean.updateProvider}"
+                                 update="tableForm" oncomplete="PF('ponudnikDialog').hide()"
+                                 icon="pi pi-check"/>
+                <p:commandButton value="Prekliči" onclick="PF('ponudnikDialog').hide()"
+                                 immediate="true" icon="pi pi-times"/>
+            </h:form>
+        </p:dialog>
+
+        <h:form>
+            <p:commandButton value="Izpiši v konzolo" action="#{ponudnikBean.izpisPonudnikovVKonzolo}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

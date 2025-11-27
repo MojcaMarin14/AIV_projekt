@@ -1,0 +1,92 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form id="userTableForm">
+            <p:growl id="messages" showDetail="true" />
+            <p:panel header="Uporabniki">
+                <p:dataTable var="user" value="#{uporabnikBean.users}" editable="true" paginator="true" rows="10">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{user.id}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{user.email}" />
+                    </p:column>
+                    <p:column headerText="Ime">
+                        <h:outputText value="#{user.name}" />
+                    </p:column>
+                    <p:column headerText="Balance">
+                        <h:outputText value="#{user.balance}" />
+                    </p:column>
+                    <p:column headerText="Vrsta Avta">
+                        <h:outputText value="#{user.carType}" />
+                    </p:column>
+                    <p:column headerText="Akcije">
+                        <p:commandButton value="Izbriši" action="#{uporabnikBean.deleteUser(user.email)}"
+                                         update="userTableForm" icon="pi pi-trash" />
+                        <p:commandButton value="Uredi" onclick="PF('userDialog').show()"
+                                         icon="pi pi-pencil">
+                            <f:setPropertyActionListener value="#{user}" target="#{uporabnikBean.selectedUser}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <!-- Dialog za urejanje uporabnika -->
+        <p:dialog header="Uredi uporabnika" widgetVar="userDialog" modal="true" resizable="false">
+            <h:form id="editForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="editId" value="ID:" />
+                    <p:inputText id="editId" value="#{uporabnikBean.selectedUser.id}" />
+
+                    <h:outputLabel for="editEmail" value="Email:" />
+                    <p:inputText id="editEmail" value="#{uporabnikBean.selectedUser.email}" />
+
+                    <h:outputLabel for="editName" value="Ime:" />
+                    <p:inputText id="editName" value="#{uporabnikBean.selectedUser.name}" />
+
+                    <h:outputLabel for="editBalance" value="Balance:" />
+                    <p:inputText id="editBalance" value="#{uporabnikBean.selectedUser.balance}" />
+
+                    <h:outputLabel for="editCarType" value="Vrsta Avta:" />
+                    <p:inputText id="editCarType" value="#{uporabnikBean.selectedUser.carType}" />
+                </h:panelGrid>
+
+                <p:commandButton value="Shrani" action="#{uporabnikBean.updateUser}"
+                                 update="userTableForm" oncomplete="PF('userDialog').hide()"
+                                 icon="pi pi-check" />
+                <p:commandButton value="Prekliči" onclick="PF('userDialog').hide()"
+                                 immediate="true" icon="pi pi-times" />
+            </h:form>
+        </p:dialog>
+
+        <!-- Dodajanje novega uporabnika -->
+        <h:form id="addUserForm">
+            <p:panel header="Dodaj Uporabnika">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="id" value="ID:" />
+                    <p:inputText id="id" value="#{uporabnikBean.id}" />
+
+                    <h:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" value="#{uporabnikBean.email}" />
+
+                    <h:outputLabel for="name" value="Ime:" />
+                    <p:inputText id="name" value="#{uporabnikBean.name}" />
+
+                    <h:outputLabel for="balance" value="Balance:" />
+                    <p:inputText id="balance" value="#{uporabnikBean.balance}" />
+
+                    <h:outputLabel for="carType" value="Vrsta Avta:" />
+                    <p:inputText id="carType" value="#{uporabnikBean.carType}" />
+                </h:panelGrid>
+                <p:commandButton value="Dodaj" action="#{uporabnikBean.addUser}"
+                                 update="addUserForm userTableForm" icon="pi pi-check" />
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

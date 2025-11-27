@@ -1,0 +1,104 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form id="addForm">
+            <p:panel header="Dodaj novo polnilno postajo">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="id" value="ID:"/>
+                    <p:inputText id="id" value="#{polnilnicaBean.id}"/>
+
+                    <h:outputLabel for="lokacija" value="Lokacija:"/>
+                    <p:inputText id="lokacija" value="#{polnilnicaBean.lokacija}"/>
+
+                    <h:outputLabel for="hitrost" value="Hitrost polnjenja (kW):"/>
+                    <p:inputText id="hitrost" value="#{polnilnicaBean.hitrostPolnjenja}"/>
+
+                    <h:outputLabel for="regija" value="Regija:"/>
+                    <p:inputText id="regija" value="#{polnilnicaBean.regija}"/>
+
+                    <h:outputLabel for="email" value="Email:"/>
+                    <p:inputText id="email" value="#{polnilnicaBean.email}"/>
+
+                    <h:outputLabel for="available" value="Na voljo:"/>
+                    <p:selectBooleanCheckbox id="available" value="#{polnilnicaBean.available}"/>
+                </h:panelGrid>
+
+                <p:commandButton value="Dodaj polnilnico" action="#{polnilnicaBean.dodajPolnilnico}"
+                                 update="addForm tableForm" icon="pi pi-plus"/>
+            </p:panel>
+        </h:form>
+
+        <h:form id="tableForm">
+            <p:growl id="messages" showDetail="true"/>
+            <p:panel header="Seznam polnilnih postaj">
+                <p:dataTable id="polnilniceTable" value="#{polnilnicaBean.polnilnice}" var="p" paginator="true" rows="10">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{p.id}"/>
+                    </p:column>
+                    <p:column headerText="Lokacija">
+                        <h:outputText value="#{p.lokacija}"/>
+                    </p:column>
+                    <p:column headerText="Hitrost (kW)">
+                        <h:outputText value="#{p.hitrostPolnjenja}"/>
+                    </p:column>
+                    <p:column headerText="Regija">
+                        <h:outputText value="#{p.regija}"/>
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{p.email}"/>
+                    </p:column>
+                    <p:column headerText="Na voljo">
+                        <h:outputText value="#{p.available ? 'Da' : 'Ne'}"/>
+                    </p:column>
+                    <p:column headerText="Akcije">
+                        <p:commandButton value="Izbriši" action="#{polnilnicaBean.deletePolnilnico(p.id)}"
+                                         update="tableForm" icon="pi pi-trash"/>
+                        <p:commandButton value="Uredi" onclick="PF('polnilnicaDialog').show()"
+                                         icon="pi pi-pencil">
+                            <f:setPropertyActionListener value="#{p}" target="#{polnilnicaBean.selectedPolnilnica}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog header="Uredi polnilno postajo" widgetVar="polnilnicaDialog" modal="true" resizable="false">
+            <h:form id="editForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="editId" value="ID:"/>
+                    <p:inputText id="editId" value="#{polnilnicaBean.selectedPolnilnica.id}" readonly="false"/>
+
+                    <h:outputLabel for="editLokacija" value="Lokacija:"/>
+                    <p:inputText id="editLokacija" value="#{polnilnicaBean.selectedPolnilnica.lokacija}"/>
+
+                    <h:outputLabel for="editAvailable" value="Na voljo:"/>
+                    <p:selectBooleanCheckbox id="editAvailable" value="#{polnilnicaBean.selectedPolnilnica.available}"/>
+
+                    <h:outputLabel for="editHitrost" value="Hitrost:"/>
+                    <p:inputText id="editHitrost" value="#{polnilnicaBean.selectedPolnilnica.hitrostPolnjenja}"/>
+
+                    <h:outputLabel for="editRegija" value="Regija:"/>
+                    <p:inputText id="editRegija" value="#{polnilnicaBean.selectedPolnilnica.regija}"/>
+
+                    <h:outputLabel for="editEmail" value="Email:"/>
+                    <p:inputText id="editEmail" value="#{polnilnicaBean.selectedPolnilnica.email}"/>
+                </h:panelGrid>
+
+                <p:commandButton value="Shrani" action="#{polnilnicaBean.updatePolnilnico}"
+                                 update="tableForm" oncomplete="PF('polnilnicaDialog').hide()"
+                                 icon="pi pi-check"/>
+                <p:commandButton value="Prekliči" onclick="PF('polnilnicaDialog').hide()"
+                                 immediate="true" icon="pi pi-times"/>
+            </h:form>
+        </p:dialog>
+
+        <h:form>
+            <p:commandButton value="Izpiši v konzolo" action="#{polnilnicaBean.izpisPolnilnicVKonzolo}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
