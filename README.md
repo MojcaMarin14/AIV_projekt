@@ -1,2 +1,2 @@
-# EmptyJSF
-Empty Maven Web JakartaEE (JSF) project
+Opis projekta
+Razvila sem spletno aplikacijo za upravljanje električnih polnilnic, ki omogoča administracijo in nadzor polnilnih postaj, ponudnikov storitev ter končnih uporabnikov. Sistem omogoča pregled nad aktivnimi polnilnicami, upravljanje dodeljenih ponudnikov in osnovne uporabniške funkcionalnosti. Aplikacija je zasnovana na Jakarta EE 10, uporablja PrimeFaces za spletni vmesnik ter Hibernate ORM in MySQL za podatkovni sloj. Za asinhrono komunikacijo uporablja JMS (Artemis), celoten sistem pa teče na WildFly strežniku. Projekt je zgrajen z Mavennom in optimiziran z uporabo Lomboka.
